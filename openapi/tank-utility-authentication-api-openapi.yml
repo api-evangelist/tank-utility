@@ -1,0 +1,81 @@
+openapi: 3.0.3
+info:
+  title: Tank Utility Propane Monitor Authentication API
+  version: '1.0'
+  description: 'The Tank Utility API returns fuel-level and telemetry data from LTE-connected propane tank monitors. Access is read-only: a caller exchanges account credentials for a short-lived bearer token (valid ~24 hours), lists the device IDs on the account, then reads each device''s latest reading (tank fuel level %, temperature, battery, and last-report time). This description was reconstructed by API Evangelist from live probing of the production host and the published community client (PyPI tank-utility) — Tank Utility does not publish an OpenAPI document. Field coverage of the device object is representative, not exhaustive.'
+  contact:
+    name: Tank Utility Support
+    email: support@tankutility.com
+    url: https://support.tankutility.com/hc/en-us
+  x-apievangelist-method: derived
+  x-apievangelist-source: Live probe of https://data.tankutility.com/api (2026-07) + PyPI tank-utility 1.5.0 client source (github k20e).
+servers:
+- url: https://data.tankutility.com/api
+  description: Production
+tags:
+- name: Authentication
+  description: Exchange account credentials for a short-lived API token.
+paths:
+  /getToken:
+    get:
+      operationId: getToken
+      summary: Get an API token
+      description: Authenticate with HTTP Basic (account email as username, account password) and receive a short-lived API token. The token is valid for approximately 24 hours and is passed as the `token` query parameter to all other operations.
+      tags:
+      - Authentication
+      security:
+      - basicAuth: []
+      responses:
+        '200':
+          description: Token issued.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TokenResponse'
+              example:
+                token: eyJhbGciOi...
+        '400':
+          description: Bad request — email not found or malformed credentials.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              example:
+                statusCode: 400
+                message: EMAIL_NOT_FOUND
+        '401':
+          description: Invalid credentials.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+components:
+  schemas:
+    TokenResponse:
+      type: object
+      properties:
+        token:
+          type: string
+          description: Short-lived API token (~24h validity).
+      required:
+      - token
+    Error:
+      type: object
+      description: Error envelope returned by the API.
+      properties:
+        statusCode:
+          type: integer
+        message:
+          type: string
+      required:
+      - message
+  securitySchemes:
+    basicAuth:
+      type: http
+      scheme: basic
+      description: HTTP Basic authentication using the Tank Utility account email (username) and password. Used only by getToken.
+    tokenAuth:
+      type: apiKey
+      in: query
+      name: token
+      description: Short-lived API token obtained from getToken, passed as the `token` query parameter. Expires after ~24 hours.
