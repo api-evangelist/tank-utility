@@ -1,0 +1,25 @@
+generated: '2026-07-21'
+method: derived
+source: openapi/tank-utility-devices-openapi.yml
+summary:
+  types:
+  - apiKey
+  - http
+  api_key_in:
+  - query
+schemes:
+- name: basicAuth
+  type: http
+  scheme: basic
+  description: HTTP Basic authentication using the Tank Utility account email (username) and
+    password. Used only by getToken.
+  sources:
+  - openapi/tank-utility-devices-openapi.yml
+- name: tokenAuth
+  type: apiKey
+  in: query
+  parameter: token
+  description: Short-lived API token obtained from getToken, passed as the `token` query parameter.
+    Expires after ~24 hours.
+  sources:
+  - openapi/tank-utility-devices-openapi.yml

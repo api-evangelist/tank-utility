@@ -1,0 +1,44 @@
+generated: '2026-07-21'
+method: searched
+description: >-
+  Results of probing the /.well-known/ discovery surface for the Tank Utility
+  API host and web hosts (2026-07). No real discovery document was found. The
+  API host (data.tankutility.com) and the marketing site return hard 404s. The
+  customer portal (portal.tankutility.com) is a single-page app that answers
+  200 with a text/html SPA shell for every /.well-known/ path, so those are
+  recorded as present-but-not-a-real-document and not saved.
+hosts:
+  - host: https://data.tankutility.com
+    documents:
+      - path: /.well-known/security.txt
+        status: 404
+      - path: /.well-known/openid-configuration
+        status: 404
+      - path: /.well-known/oauth-authorization-server
+        status: 404
+      - path: /.well-known/api-catalog
+        status: 404
+      - path: /.well-known/ai-plugin.json
+        status: 404
+  - host: https://tankutility.com
+    documents:
+      - path: /.well-known/security.txt
+        status: 404
+      - path: /.well-known/openid-configuration
+        status: 404
+      - path: /.well-known/oauth-authorization-server
+        status: 404
+      - path: /.well-known/api-catalog
+        status: 404
+      - path: /.well-known/ai-plugin.json
+        status: 404
+  - host: https://portal.tankutility.com
+    documents:
+      - path: /.well-known/security.txt
+        status: 200
+        type: text/html
+        note: SPA shell, not a real security.txt — not saved.
+      - path: /.well-known/openid-configuration
+        status: 200
+        type: text/html
+        note: SPA shell, not a real OIDC document — not saved.

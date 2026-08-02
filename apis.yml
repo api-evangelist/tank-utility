@@ -1,8 +1,27 @@
 aid: tank-utility
 name: Tank Utility
-description: Tank Utility is a company surfaced as a portfolio company of bullpen-capital and added to
-  the API Evangelist network as a stub for enrichment. This profile is a lead awaiting the enrichment
-  pipeline.
+description: >-
+  Tank Utility makes LTE-connected propane tank monitors, mobile apps, and a
+  read-only API that surface their data. Its sensors report tank fuel level,
+  temperature, and battery state so homeowners get low-fuel alerts and fuel
+  marketers can route deliveries by real consumption instead of guesswork —
+  Tank Utility says this drops the same gallons in up to 40% fewer deliveries.
+  The Tank Utility API lets an account exchange credentials (HTTP Basic) for a
+  short-lived token, list the monitors on the account, and read each device's
+  latest reading. Tank Utility is owned by Anova.
+accessModel:
+  pricing: unknown
+  onboarding: self-serve
+  trial: false
+  try_now: false
+  public: false
+  label: Self-serve signup
+  confidence: medium
+  source:
+  - authentication
+  generated: '2026-07-22'
+  method: derived
+image: https://tankutility.com/wp-content/uploads/2025/06/logo_merge.png
 url: https://raw.githubusercontent.com/api-evangelist/tank-utility/refs/heads/main/apis.yml
 x-type: company
 x-source: vc-portfolio
@@ -10,17 +29,90 @@ x-backed-by:
 - bullpen-capital
 x-tier: stub
 x-tier-reason: portfolio-lead
+x-enrichment:
+  date: '2026-07-21'
+  status: enriched
+  artifacts_added: 18
+  pass: local-v1
 specificationVersion: '0.20'
 created: '2026-07-17'
-modified: '2026-07-17'
+modified: '2026-07-21'
 tags:
+- Propane
+- Tank Monitoring
+- IoT
+- Fuel Delivery
+- Telemetry
+- Energy
+- Sensors
 - Company
-apis: []
+apis:
+- aid: tank-utility:tank-utility-authentication-api
+  name: Tank Utility Authentication API
+  description: Exchange account credentials for a short-lived API token.
+  humanURL: https://tankutility.com
+  baseURL: https://data.tankutility.com/api
+  tags:
+  - Authentication
+  properties:
+  - type: OpenAPI
+    url: openapi/tank-utility-authentication-api-openapi.yml
+  - type: Authentication
+    url: authentication/tank-utility-authentication.yml
+- aid: tank-utility:tank-utility-devices-api
+  name: Tank Utility Devices API
+  description: List and read propane tank monitor devices.
+  humanURL: https://tankutility.com
+  baseURL: https://data.tankutility.com/api
+  tags:
+  - Devices
+  properties:
+  - type: OpenAPI
+    url: openapi/tank-utility-devices-api-openapi.yml
+  - type: Authentication
+    url: authentication/tank-utility-authentication.yml
 maintainers:
 - FN: Kin Lane
   email: kin@apievangelist.com
 - FN: APIs.json
   email: info@apis.io
 common:
+- type: DomainSecurity
+  url: security/tank-utility-domain-security.yml
+- type: Authentication
+  url: authentication/tank-utility-authentication.yml
+- type: Conventions
+  url: conventions/tank-utility-conventions.yml
+- type: ErrorCatalog
+  url: errors/tank-utility-error-codes.yml
+- type: Lifecycle
+  url: lifecycle/tank-utility-lifecycle.yml
+- type: DataModel
+  url: data-model/tank-utility-data-model.yml
+- type: Conformance
+  url: conformance/tank-utility-conformance.yml
+- type: Packages
+  url: packages/tank-utility-packages.yml
+- type: CLI
+  url: cli/tank-utility-cli.yml
+- type: Overlay
+  url: overlays/tank-utility-devices-overlay.yaml
+- type: LLMsTxt
+  url: llms/tank-utility-llms.txt
+- type: AgentSkill
+  url: skills/_index.yml
+- type: Arazzo
+  name: Read propane tank level
+  url: arazzo/tank-utility-read-tank-level.yml
+- type: Support
+  url: https://support.tankutility.com/hc/en-us
+- type: Blog
+  url: https://tankutility.com/blog/
+- type: Login
+  url: https://portal.tankutility.com
+- type: TermsOfService
+  url: https://tankutility.com/tos/
+- type: PrivacyPolicy
+  url: https://www.anova.com/privacy-policy/
 - type: Website
   url: https://tankutility.com

@@ -1,0 +1,33 @@
+generated: '2026-07-21'
+method: searched
+source: https://pypi.org/project/tank-utility/
+official: false
+description: >-
+  There is no first-party Tank Utility CLI. A community CLI ships with the
+  third-party `tank-utility` Python package (Kris Molendyke, MIT) — the same
+  library the Home Assistant integration uses. It prints device data as JSON.
+install:
+  - method: pip
+    command: pip install tank-utility
+invocation: python -m tank_utility
+flags:
+  - name: --username
+    description: Account email (or env TANK_UTILITY_USERNAME).
+  - name: --password
+    description: Account password (or env TANK_UTILITY_PASSWORD).
+  - name: --pretty
+    description: Pretty-print the returned device data.
+  - name: --verbose
+    description: Print debugging information.
+  - name: --version
+    description: Print the client version.
+flows:
+  - name: Dump all device data
+    command: python -m tank_utility --username you@example.com --password '***' --pretty
+    description: >-
+      Authenticates, lists devices, and prints each device's latest reading as
+      JSON keyed by device ID.
+notes: >-
+  Community tooling, not vendor-published. Catalogued here because it is the de
+  facto CLI surface for the Tank Utility API; the binary is catalogued in
+  packages/.

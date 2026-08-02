@@ -1,0 +1,27 @@
+generated: '2026-07-21'
+method: derived
+source: >-
+  Derived from openapi/tank-utility-devices-openapi.yml and live API probing.
+  No published compliance program (SOC 2/ISO/PCI/HIPAA) was found for the Tank
+  Utility API surface, so no `Compliance` pointer is emitted.
+standards:
+  - id: oauth2
+    conforms: false
+    evidence: Auth is HTTP Basic (getToken) plus an apiKey token query param; no OAuth2 flows.
+  - id: oidc
+    conforms: false
+  - id: rfc9457-problem-details
+    conforms: false
+    evidence: Errors use a custom {statusCode, message} envelope, not application/problem+json.
+  - id: rest
+    conforms: true
+    evidence: Resource-oriented HTTPS/JSON GET operations.
+  - id: pagination
+    conforms: false
+    evidence: getDevices returns the full device-id array with no paging params.
+  - id: idempotency
+    conforms: true
+    evidence: All operations are GET (safe/idempotent); no state-changing endpoints.
+  - id: webhooks
+    conforms: false
+    evidence: No event/webhook surface; data is polled.

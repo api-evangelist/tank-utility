@@ -1,0 +1,18 @@
+overlay: 1.0.0
+info:
+  title: API Evangelist enhancements for Tank Utility Propane Monitor API
+  version: 1.0.0
+extends: openapi/tank-utility-devices-openapi.yml
+actions:
+  - target: $.info
+    update:
+      x-apievangelist-rating: 2
+      x-apievangelist-notes: >-
+        Read-only telemetry API reconstructed from live probing and the
+        community client; provider publishes no OpenAPI. Token-based access,
+        no webhooks/events, no sandbox.
+  - target: $.info
+    update:
+      x-api-style: REST
+      x-read-only: true
+      x-auth-model: basic-to-token

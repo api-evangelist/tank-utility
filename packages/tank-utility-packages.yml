@@ -1,0 +1,25 @@
+generated: '2026-07-21'
+method: searched
+source: >-
+  PyPI registry search (pypi.org/pypi/tank-utility/json) and npm registry
+  probe. Tank Utility publishes no first-party SDK; the only client library
+  found is a community/third-party package.
+packages:
+  - language: python
+    registry: pypi
+    name: tank-utility
+    version: "1.5.0"
+    url: https://pypi.org/project/tank-utility/
+    install: pip install tank-utility
+    official: false
+    author: Kris Molendyke
+    license: MIT
+    description: >-
+      Community CLI and library for reading data from a Tank Utility propane
+      tank monitor via its API. This is the client the Home Assistant
+      tank_utility integration is built on.
+notes: >-
+  No first-party SDK published on npm, PyPI, Maven Central, NuGet, pkg.go.dev,
+  RubyGems, Packagist, or crates.io as of the probe date. The single available
+  library is third-party (official:false), so no `SDKs` rating pointer is
+  emitted.

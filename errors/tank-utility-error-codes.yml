@@ -1,0 +1,30 @@
+generated: '2026-07-21'
+method: derived
+source: >-
+  Derived from openapi/tank-utility-devices-openapi.yml and observed live
+  responses from https://data.tankutility.com/api (2026-07). The API returns a
+  custom JSON error envelope; it is not RFC 9457 application/problem+json.
+format: custom
+envelope:
+  fields:
+    statusCode: HTTP status code (integer), present on some errors.
+    message: Machine-readable error string (e.g. EMAIL_NOT_FOUND).
+errors:
+  - status: 400
+    message: EMAIL_NOT_FOUND
+    meaning: The email supplied to getToken is not a registered account.
+    remediation: Verify the account email; sign in at portal.tankutility.com to confirm.
+    source_operation: openapi/tank-utility-devices-openapi.yml#getToken
+    observed: true
+  - status: 401
+    message: Unauthorized
+    meaning: Missing, invalid, or expired token on a device call (tokens expire ~24h).
+    remediation: Call getToken again to obtain a fresh token.
+    source_operation: openapi/tank-utility-devices-openapi.yml#getDevices
+    observed: true
+  - status: 404
+    message: Not Found
+    meaning: The requested deviceId does not exist on the authenticated account.
+    remediation: List devices with getDevices and use a returned ID.
+    source_operation: openapi/tank-utility-devices-openapi.yml#getDevice
+    observed: false

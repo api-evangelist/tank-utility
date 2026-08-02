@@ -1,0 +1,26 @@
+generated: '2026-07-21'
+method: searched
+source: >-
+  Live probing of the Tank Utility API and web hosts (2026-07). Tank Utility
+  publishes no formal versioning policy, deprecation policy, SLA, or public
+  status page. The token lifetime is documented behavior (community client).
+versioning:
+  scheme: none
+  current: null
+  notes: >-
+    The API is served under an unversioned /api path prefix; no version
+    identifier appears in the path, header, or media type.
+token_lifetime:
+  ttl_hours: 24
+  notes: API tokens returned by getToken expire after approximately 24 hours.
+deprecation:
+  policy_url: null
+  sunset_header: false
+sla:
+  url: null
+status_page: null
+deprecated_operations: []
+notes: >-
+  No StatusPage or Deprecation rating pointer is emitted — neither a public
+  status page (status.tankutility.com did not resolve) nor a deprecation policy
+  was found.

@@ -1,0 +1,7 @@
+generated: '2026-07-21'
+method: derived
+workflows:
+  - file: tank-utility-read-tank-level.yml
+    workflowId: readTankLevel
+    title: Read propane tank level
+    summary: Get a token, list devices, and read the first device's latest reading.

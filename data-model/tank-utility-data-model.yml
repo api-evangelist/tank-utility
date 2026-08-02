@@ -1,0 +1,19 @@
+generated: '2026-07-21'
+method: derived
+source: >-
+  Derived from the schema references in openapi/tank-utility-devices-openapi.yml.
+  A small read-only telemetry model: an account owns devices, each device
+  carries its latest reading.
+notation: >-
+  relationships use has_one / has_many / belongs_to with the field/link name;
+  direction is from the entity that owns the reference.
+entities:
+  - {name: Account, id_prefix: null, domain: identity, description: The credentialed Tank Utility account; not a returned object but the scope of a token.}
+  - {name: Device, id_prefix: null, domain: telemetry, description: A propane tank monitor (name, address, capacity, status, orientation).}
+  - {name: Reading, id_prefix: null, domain: telemetry, description: The latest telemetry sample — tank fuel level %, temperature, and report time.}
+relationships:
+  - {from: Account, to: Device, kind: has_many, via: devices}
+  - {from: Device, to: Reading, kind: has_one, via: lastReading}
+notes: >-
+  The Reading is embedded in the Device response (lastReading), not a separately
+  addressable resource. There are no cross-device references or foreign keys.

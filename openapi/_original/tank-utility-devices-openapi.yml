@@ -1,0 +1,229 @@
+openapi: 3.0.3
+info:
+  title: Tank Utility Propane Monitor API
+  version: "1.0"
+  description: >-
+    The Tank Utility API returns fuel-level and telemetry data from LTE-connected
+    propane tank monitors. Access is read-only: a caller exchanges account
+    credentials for a short-lived bearer token (valid ~24 hours), lists the
+    device IDs on the account, then reads each device's latest reading (tank
+    fuel level %, temperature, battery, and last-report time). This description
+    was reconstructed by API Evangelist from live probing of the production host
+    and the published community client (PyPI tank-utility) — Tank Utility does
+    not publish an OpenAPI document. Field coverage of the device object is
+    representative, not exhaustive.
+  contact:
+    name: Tank Utility Support
+    email: support@tankutility.com
+    url: https://support.tankutility.com/hc/en-us
+  x-apievangelist-method: derived
+  x-apievangelist-source: >-
+    Live probe of https://data.tankutility.com/api (2026-07) + PyPI
+    tank-utility 1.5.0 client source (github k20e).
+servers:
+  - url: https://data.tankutility.com/api
+    description: Production
+tags:
+  - name: Authentication
+    description: Exchange account credentials for a short-lived API token.
+  - name: Devices
+    description: List and read propane tank monitor devices.
+paths:
+  /getToken:
+    get:
+      operationId: getToken
+      summary: Get an API token
+      description: >-
+        Authenticate with HTTP Basic (account email as username, account
+        password) and receive a short-lived API token. The token is valid for
+        approximately 24 hours and is passed as the `token` query parameter to
+        all other operations.
+      tags: [Authentication]
+      security:
+        - basicAuth: []
+      responses:
+        '200':
+          description: Token issued.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TokenResponse'
+              example:
+                token: "eyJhbGciOi..."
+        '400':
+          description: Bad request — email not found or malformed credentials.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              example:
+                statusCode: 400
+                message: EMAIL_NOT_FOUND
+        '401':
+          description: Invalid credentials.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /devices:
+    get:
+      operationId: getDevices
+      summary: List devices
+      description: >-
+        Return the list of device IDs associated with the authenticated
+        account's token.
+      tags: [Devices]
+      security:
+        - tokenAuth: []
+      parameters:
+        - $ref: '#/components/parameters/Token'
+      responses:
+        '200':
+          description: Device IDs for the account.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DevicesResponse'
+              example:
+                devices: ["5c19xxxxxxxxxxxxxxxxxxxx"]
+        '401':
+          description: Missing or expired token.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /devices/{deviceId}:
+    get:
+      operationId: getDevice
+      summary: Get device data
+      description: >-
+        Return the current data for a single device, including its latest
+        reading (tank fuel level percentage, temperature, battery state, and the
+        time of the last report).
+      tags: [Devices]
+      security:
+        - tokenAuth: []
+      parameters:
+        - name: deviceId
+          in: path
+          required: true
+          description: The device identifier returned by `getDevices`.
+          schema:
+            type: string
+        - $ref: '#/components/parameters/Token'
+      responses:
+        '200':
+          description: Device data.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeviceResponse'
+        '401':
+          description: Missing or expired token.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Device not found for this account.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+components:
+  securitySchemes:
+    basicAuth:
+      type: http
+      scheme: basic
+      description: >-
+        HTTP Basic authentication using the Tank Utility account email
+        (username) and password. Used only by getToken.
+    tokenAuth:
+      type: apiKey
+      in: query
+      name: token
+      description: >-
+        Short-lived API token obtained from getToken, passed as the `token`
+        query parameter. Expires after ~24 hours.
+  parameters:
+    Token:
+      name: token
+      in: query
+      required: true
+      description: API token from getToken (valid ~24 hours).
+      schema:
+        type: string
+  schemas:
+    TokenResponse:
+      type: object
+      properties:
+        token:
+          type: string
+          description: Short-lived API token (~24h validity).
+      required: [token]
+    DevicesResponse:
+      type: object
+      properties:
+        devices:
+          type: array
+          description: Device IDs on the account.
+          items:
+            type: string
+      required: [devices]
+    DeviceResponse:
+      type: object
+      properties:
+        device:
+          $ref: '#/components/schemas/Device'
+      required: [device]
+    Device:
+      type: object
+      description: A propane tank monitor and its current state.
+      properties:
+        name:
+          type: string
+          description: User-assigned device/tank name.
+        address:
+          type: string
+          description: Service address of the tank.
+        capacity:
+          type: number
+          description: Tank capacity in gallons.
+        status:
+          type: string
+          description: Device connectivity/health status.
+        orientation:
+          type: string
+          description: Tank orientation (e.g. horizontal or vertical).
+        fuelType:
+          type: string
+          description: Fuel type monitored (propane).
+        lastReading:
+          $ref: '#/components/schemas/Reading'
+      required: [name, lastReading]
+    Reading:
+      type: object
+      description: The most recent telemetry reading from the monitor.
+      properties:
+        tank:
+          type: number
+          description: Fuel level as a percentage of capacity (0-100).
+        temperature:
+          type: number
+          description: Ambient temperature reported by the monitor.
+        time:
+          type: integer
+          description: Reading timestamp (epoch).
+        time_iso:
+          type: string
+          format: date-time
+          description: Reading timestamp (ISO 8601).
+    Error:
+      type: object
+      description: Error envelope returned by the API.
+      properties:
+        statusCode:
+          type: integer
+        message:
+          type: string
+      required: [message]

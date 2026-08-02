@@ -1,0 +1,41 @@
+generated: '2026-07-21'
+method: derived
+source: >-
+  Derived from openapi/tank-utility-devices-openapi.yml, the authentication
+  profile, and live probing. Cross-cutting request/response semantics for the
+  Tank Utility read-only telemetry API.
+base_url: https://data.tankutility.com/api
+api_style: REST over HTTPS, JSON responses, GET-only (read-only)
+authentication:
+  scheme: >-
+    HTTP Basic (account email + password) at getToken returns a short-lived
+    token; the token is then passed as the `token` query parameter to all
+    device calls.
+  token_ttl: ~24 hours
+  detail: authentication/tank-utility-authentication.yml
+idempotency:
+  supported: true
+  mechanism: >-
+    All operations are HTTP GET (safe and inherently idempotent); the API
+    exposes no state-changing endpoints, so there is no idempotency-key header.
+  note: >-
+    Idempotency here means read-safety, not a client-supplied Idempotency-Key
+    contract. No `Idempotency` rating pointer is emitted because there is no
+    idempotency-key mechanism to advertise.
+pagination:
+  style: none
+  note: getDevices returns the full array of device IDs; no paging parameters.
+metadata:
+  supported: false
+request_tracing:
+  request_id_header: null
+versioning:
+  scheme: none
+  detail: lifecycle/tank-utility-lifecycle.yml
+error_envelope:
+  shape: "{ statusCode, message }"
+  content_type: application/json
+  detail: errors/tank-utility-error-codes.yml
+rate_limit_signaling:
+  documented: false
+  note: No rate-limit headers or published limits observed.
