@@ -77,6 +77,8 @@ maintainers:
 - FN: APIs.json
   email: info@apis.io
 common:
+- type: MCPServer
+  url: mcp/tank-utility-mcp.yml
 - type: DomainSecurity
   url: security/tank-utility-domain-security.yml
 - type: Authentication
