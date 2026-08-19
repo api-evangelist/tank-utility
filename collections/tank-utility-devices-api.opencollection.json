@@ -1,0 +1,74 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Tank Utility Propane Monitor Authentication Devices API",
+    "version": "1.0"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Devices",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List devices",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://data.tankutility.com/api/devices",
+            "params": [
+              {
+                "name": "token",
+                "value": "",
+                "type": "query",
+                "description": "API token from getToken (valid ~24 hours)."
+              }
+            ],
+            "auth": {
+              "type": "apikey",
+              "key": "token",
+              "value": "{{token}}",
+              "placement": "query"
+            }
+          },
+          "docs": "Return the list of device IDs associated with the authenticated account's token."
+        },
+        {
+          "info": {
+            "name": "Get device data",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://data.tankutility.com/api/devices/:deviceId",
+            "params": [
+              {
+                "name": "deviceId",
+                "value": "",
+                "type": "path",
+                "description": "The device identifier returned by `getDevices`."
+              },
+              {
+                "name": "token",
+                "value": "",
+                "type": "query",
+                "description": "API token from getToken (valid ~24 hours)."
+              }
+            ],
+            "auth": {
+              "type": "apikey",
+              "key": "token",
+              "value": "{{token}}",
+              "placement": "query"
+            }
+          },
+          "docs": "Return the current data for a single device, including its latest reading (tank fuel level percentage, temperature, battery state, and the time of the last report)."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

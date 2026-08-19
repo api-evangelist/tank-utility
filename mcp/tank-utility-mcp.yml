@@ -1,23 +1,27 @@
 generated: '2026-07-21'
 method: derived
 status: candidate
-source: >-
-  Derived from the operations in openapi/tank-utility-devices-openapi.yml. Tank
-  Utility operates no official hosted or local MCP server (none found in docs,
-  the npm @modelcontextprotocol scope, or MCP registries). This is a candidate
-  tool list a builder could implement over the existing REST API — not a
-  published server, so no `MCPServer` rating pointer is wired.
+source: Derived from the operations in openapi/tank-utility-devices-openapi.yml. Tank Utility operates
+  no official hosted or local MCP server (none found in docs, the npm @modelcontextprotocol scope, or
+  MCP registries). This is a candidate tool list a builder could implement over the existing REST API
+  — not a published server, so no `MCPServer` rating pointer is wired.
 server:
   name: tank-utility
   transport: http
   url: null
 tools:
-  - name: get_token
-    description: Exchange account email/password (HTTP Basic) for a short-lived API token.
-    source_operation: openapi/tank-utility-devices-openapi.yml#getToken
-  - name: list_devices
-    description: List the propane monitor device IDs on the account.
-    source_operation: openapi/tank-utility-devices-openapi.yml#getDevices
-  - name: get_device
-    description: Read a device's latest reading — tank fuel level %, temperature, battery, last report time.
-    source_operation: openapi/tank-utility-devices-openapi.yml#getDevice
+- name: get_token
+  description: Exchange account email/password (HTTP Basic) for a short-lived API token.
+  source_operation: openapi/tank-utility-devices-openapi.yml#getToken
+- name: list_devices
+  description: List the propane monitor device IDs on the account.
+  source_operation: openapi/tank-utility-devices-openapi.yml#getDevices
+- name: get_device
+  description: Read a device's latest reading — tank fuel level %, temperature, battery, last report time.
+  source_operation: openapi/tank-utility-devices-openapi.yml#getDevice
+deployment:
+  mode: none
+  verified: derived
+  tools: 3
+  checked: '2026-08-12'
+  source: catalog MCP census

@@ -1,0 +1,34 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Tank Utility Propane Monitor Authentication API",
+    "version": "1.0"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Authentication",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Get an API token",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://data.tankutility.com/api/getToken",
+            "auth": {
+              "type": "basic",
+              "username": "{{username}}",
+              "password": "{{password}}"
+            }
+          },
+          "docs": "Authenticate with HTTP Basic (account email as username, account password) and receive a short-lived API token. The token is valid for approximately 24 hours and is passed as the `token` query parameter to all other operations."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

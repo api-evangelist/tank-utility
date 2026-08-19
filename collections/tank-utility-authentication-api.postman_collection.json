@@ -1,0 +1,208 @@
+{
+  "item": [
+    {
+      "id": "fae18ca7-e0d6-443c-962a-c8cae457f770",
+      "name": "Authentication",
+      "description": {
+        "content": "Exchange account credentials for a short-lived API token.",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "13d8aef2-c146-4fc6-a27f-67ba209ad238",
+          "name": "Get an API token",
+          "request": {
+            "name": "Get an API token",
+            "description": {
+              "content": "Authenticate with HTTP Basic (account email as username, account password) and receive a short-lived API token. The token is valid for approximately 24 hours and is passed as the `token` query parameter to all other operations.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "getToken"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": {
+              "type": "basic",
+              "basic": [
+                {
+                  "key": "username",
+                  "value": "{{basicAuthUsername}}"
+                },
+                {
+                  "key": "password",
+                  "value": "{{basicAuthPassword}}"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "7b5d87d3-7e5b-4312-beb9-6a0bbba13951",
+              "name": "Token issued.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "getToken"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"token\": \"eyJhbGciOi...\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "c16d8d55-036d-4d95-9648-7f68195d41e2",
+              "name": "Bad request — email not found or malformed credentials.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "getToken"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"statusCode\": 400,\n  \"message\": \"EMAIL_NOT_FOUND\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "491fed6f-5e63-4916-87a2-287d47fecb7b",
+              "name": "Invalid credentials.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "getToken"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"message\": \"string\",\n  \"statusCode\": 4245\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://data.tankutility.com/api",
+      "key": "baseUrl"
+    }
+  ],
+  "info": {
+    "_postman_id": "39f6e846-b85a-44d4-9402-24d54c4903ea",
+    "name": "Tank Utility Propane Monitor Authentication API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "The Tank Utility API returns fuel-level and telemetry data from LTE-connected propane tank monitors. Access is read-only: a caller exchanges account credentials for a short-lived bearer token (valid ~24 hours), lists the device IDs on the account, then reads each device's latest reading (tank fuel level %, temperature, battery, and last-report time). This description was reconstructed by API Evangelist from live probing of the production host and the published community client (PyPI tank-utility) — Tank Utility does not publish an OpenAPI document. Field coverage of the device object is representative, not exhaustive.\n\nContact Support:\n Name: Tank Utility Support\n Email: support@tankutility.com",
+      "type": "text/plain"
+    }
+  }
+}
