@@ -7,58 +7,61 @@ info:
     account, and read the latest reading (fuel level %, temperature) for the
     first device.
 sourceDescriptions:
-  - name: tankUtility
-    url: ../openapi/tank-utility-devices-openapi.yml
-    type: openapi
+- name: authenticationApi
+  url: ../openapi/tank-utility-authentication-api-openapi.yml
+  type: openapi
+- name: devicesApi
+  url: ../openapi/tank-utility-devices-api-openapi.yml
+  type: openapi
 workflows:
-  - workflowId: readTankLevel
-    summary: Get a token, list devices, and read the first device's latest reading.
-    description: >-
-      Exchanges account credentials for a token, lists device IDs, then reads
-      the first device's telemetry.
-    inputs:
-      type: object
-      required: [username, password]
-      properties:
-        username:
-          type: string
-          description: Tank Utility account email.
-        password:
-          type: string
-          description: Tank Utility account password.
-    steps:
-      - stepId: getToken
-        description: Exchange Basic-auth credentials for a short-lived API token.
-        operationId: getToken
-        successCriteria:
-          - condition: $statusCode == 200
-        outputs:
-          token: $response.body#/token
-      - stepId: listDevices
-        description: List the device IDs on the account.
-        operationId: getDevices
-        parameters:
-          - name: token
-            in: query
-            value: $steps.getToken.outputs.token
-        successCriteria:
-          - condition: $statusCode == 200
-        outputs:
-          devices: $response.body#/devices
-          firstDevice: $response.body#/devices/0
-      - stepId: readDevice
-        description: Read the first device's latest reading.
-        operationId: getDevice
-        parameters:
-          - name: deviceId
-            in: path
-            value: $steps.listDevices.outputs.firstDevice
-          - name: token
-            in: query
-            value: $steps.getToken.outputs.token
-        successCriteria:
-          - condition: $statusCode == 200
-        outputs:
-          device: $response.body#/device
+- workflowId: readTankLevel
+  summary: Get a token, list devices, and read the first device's latest reading.
+  description: >-
+    Exchanges account credentials for a token, lists device IDs, then reads
+    the first device's telemetry.
+  inputs:
+    type: object
+    required: [username, password]
+    properties:
+      username:
+        type: string
+        description: Tank Utility account email.
+      password:
+        type: string
+        description: Tank Utility account password.
+  steps:
+  - stepId: getToken
+    description: Exchange Basic-auth credentials for a short-lived API token.
+    operationId: getToken
+    successCriteria:
+    - condition: $statusCode == 200
     outputs:
-      device: $steps.readDevice.outputs.device
+      token: $response.body#/token
+  - stepId: listDevices
+    description: List the device IDs on the account.
+    operationId: getDevices
+    parameters:
+    - name: token
+      in: query
+      value: $steps.getToken.outputs.token
+    successCriteria:
+    - condition: $statusCode == 200
+    outputs:
+      devices: $response.body#/devices
+      firstDevice: $response.body#/devices/0
+  - stepId: readDevice
+    description: Read the first device's latest reading.
+    operationId: getDevice
+    parameters:
+    - name: deviceId
+      in: path
+      value: $steps.listDevices.outputs.firstDevice
+    - name: token
+      in: query
+      value: $steps.getToken.outputs.token
+    successCriteria:
+    - condition: $statusCode == 200
+    outputs:
+      device: $response.body#/device
+  outputs:
+    device: $steps.readDevice.outputs.device
