@@ -1,8 +1,8 @@
-openapi: 3.0.3
+openapi: 3.2.0
 info:
-  title: Tank Utility Propane Monitor Authentication Devices API
+  title: Tank Utility Propane Monitor Devices API
   version: '1.0'
-  description: 'The Tank Utility API returns fuel-level and telemetry data from LTE-connected propane tank monitors. Access is read-only: a caller exchanges account credentials for a short-lived bearer token (valid ~24 hours), lists the device IDs on the account, then reads each device''s latest reading (tank fuel level %, temperature, battery, and last-report time). This description was reconstructed by API Evangelist from live probing of the production host and the published community client (PyPI tank-utility) — Tank Utility does not publish an OpenAPI document. Field coverage of the device object is representative, not exhaustive.'
+  description: The Tank Utility API returns fuel-level and telemetry data from LTE-connected propane tank monitors.
   contact:
     name: Tank Utility Support
     email: support@tankutility.com
@@ -80,15 +80,41 @@ paths:
               schema:
                 $ref: '#/components/schemas/Error'
 components:
-  parameters:
-    Token:
-      name: token
-      in: query
-      required: true
-      description: API token from getToken (valid ~24 hours).
-      schema:
-        type: string
   schemas:
+    Error:
+      type: object
+      description: Error envelope returned by the API.
+      properties:
+        statusCode:
+          type: integer
+        message:
+          type: string
+      required:
+      - message
+    Reading:
+      type: object
+      description: The most recent telemetry reading from the monitor.
+      properties:
+        tank:
+          type: number
+          description: Fuel level as a percentage of capacity (0-100).
+        temperature:
+          type: number
+          description: Ambient temperature reported by the monitor.
+        time:
+          type: integer
+          description: Reading timestamp (epoch).
+        time_iso:
+          type: string
+          format: date-time
+          description: Reading timestamp (ISO 8601).
+    DeviceResponse:
+      type: object
+      properties:
+        device:
+          $ref: '#/components/schemas/Device'
+      required:
+      - device
     Device:
       type: object
       description: A propane tank monitor and its current state.
@@ -126,40 +152,14 @@ components:
             type: string
       required:
       - devices
-    Error:
-      type: object
-      description: Error envelope returned by the API.
-      properties:
-        statusCode:
-          type: integer
-        message:
-          type: string
-      required:
-      - message
-    DeviceResponse:
-      type: object
-      properties:
-        device:
-          $ref: '#/components/schemas/Device'
-      required:
-      - device
-    Reading:
-      type: object
-      description: The most recent telemetry reading from the monitor.
-      properties:
-        tank:
-          type: number
-          description: Fuel level as a percentage of capacity (0-100).
-        temperature:
-          type: number
-          description: Ambient temperature reported by the monitor.
-        time:
-          type: integer
-          description: Reading timestamp (epoch).
-        time_iso:
-          type: string
-          format: date-time
-          description: Reading timestamp (ISO 8601).
+  parameters:
+    Token:
+      name: token
+      in: query
+      required: true
+      description: API token from getToken (valid ~24 hours).
+      schema:
+        type: string
   securitySchemes:
     basicAuth:
       type: http

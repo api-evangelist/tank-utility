@@ -1,8 +1,8 @@
-openapi: 3.0.3
+openapi: 3.2.0
 info:
   title: Tank Utility Propane Monitor Authentication API
   version: '1.0'
-  description: 'The Tank Utility API returns fuel-level and telemetry data from LTE-connected propane tank monitors. Access is read-only: a caller exchanges account credentials for a short-lived bearer token (valid ~24 hours), lists the device IDs on the account, then reads each device''s latest reading (tank fuel level %, temperature, battery, and last-report time). This description was reconstructed by API Evangelist from live probing of the production host and the published community client (PyPI tank-utility) — Tank Utility does not publish an OpenAPI document. Field coverage of the device object is representative, not exhaustive.'
+  description: The Tank Utility API returns fuel-level and telemetry data from LTE-connected propane tank monitors.
   contact:
     name: Tank Utility Support
     email: support@tankutility.com
@@ -51,14 +51,6 @@ paths:
                 $ref: '#/components/schemas/Error'
 components:
   schemas:
-    TokenResponse:
-      type: object
-      properties:
-        token:
-          type: string
-          description: Short-lived API token (~24h validity).
-      required:
-      - token
     Error:
       type: object
       description: Error envelope returned by the API.
@@ -69,6 +61,14 @@ components:
           type: string
       required:
       - message
+    TokenResponse:
+      type: object
+      properties:
+        token:
+          type: string
+          description: Short-lived API token (~24h validity).
+      required:
+      - token
   securitySchemes:
     basicAuth:
       type: http
