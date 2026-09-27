@@ -51,6 +51,14 @@ paths:
                 $ref: '#/components/schemas/Error'
 components:
   schemas:
+    TokenResponse:
+      type: object
+      properties:
+        token:
+          type: string
+          description: Short-lived API token (~24h validity).
+      required:
+      - token
     Error:
       type: object
       description: Error envelope returned by the API.
@@ -61,14 +69,6 @@ components:
           type: string
       required:
       - message
-    TokenResponse:
-      type: object
-      properties:
-        token:
-          type: string
-          description: Short-lived API token (~24h validity).
-      required:
-      - token
   securitySchemes:
     basicAuth:
       type: http

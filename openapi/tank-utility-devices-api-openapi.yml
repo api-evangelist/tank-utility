@@ -81,16 +81,6 @@ paths:
                 $ref: '#/components/schemas/Error'
 components:
   schemas:
-    Error:
-      type: object
-      description: Error envelope returned by the API.
-      properties:
-        statusCode:
-          type: integer
-        message:
-          type: string
-      required:
-      - message
     Reading:
       type: object
       description: The most recent telemetry reading from the monitor.
@@ -115,6 +105,16 @@ components:
           $ref: '#/components/schemas/Device'
       required:
       - device
+    DevicesResponse:
+      type: object
+      properties:
+        devices:
+          type: array
+          description: Device IDs on the account.
+          items:
+            type: string
+      required:
+      - devices
     Device:
       type: object
       description: A propane tank monitor and its current state.
@@ -142,16 +142,16 @@ components:
       required:
       - name
       - lastReading
-    DevicesResponse:
+    Error:
       type: object
+      description: Error envelope returned by the API.
       properties:
-        devices:
-          type: array
-          description: Device IDs on the account.
-          items:
-            type: string
+        statusCode:
+          type: integer
+        message:
+          type: string
       required:
-      - devices
+      - message
   parameters:
     Token:
       name: token
