@@ -105,16 +105,16 @@ components:
           $ref: '#/components/schemas/Device'
       required:
       - device
-    DevicesResponse:
+    Error:
       type: object
+      description: Error envelope returned by the API.
       properties:
-        devices:
-          type: array
-          description: Device IDs on the account.
-          items:
-            type: string
+        statusCode:
+          type: integer
+        message:
+          type: string
       required:
-      - devices
+      - message
     Device:
       type: object
       description: A propane tank monitor and its current state.
@@ -142,16 +142,16 @@ components:
       required:
       - name
       - lastReading
-    Error:
+    DevicesResponse:
       type: object
-      description: Error envelope returned by the API.
       properties:
-        statusCode:
-          type: integer
-        message:
-          type: string
+        devices:
+          type: array
+          description: Device IDs on the account.
+          items:
+            type: string
       required:
-      - message
+      - devices
   parameters:
     Token:
       name: token
